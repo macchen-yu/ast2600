@@ -1,0 +1,39 @@
+mkdir -p AST2600_qemu 
+
+sudo sh docker_install.sh 
+git clone https://github.com/AspeedTech-BMC/openbmc.git
+
+cd  asbmc_v9.5/openbmc/
+. setup ast2600-default  as26_build
+
+bitbake obmc-phosphor-image
+
+這個要等非長久
+
+記住 伺服器上 記憶體記得要超過32GB 
+
+安裝qemu
+sudo apt install qemu-system qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virt-manager -y
+
+cd ~/asbmc_v9.5/openbmc/as26_build
+
+
+qemu-system-arm  -machine help  查詢有那些機器
+
+
+
+qemu-system-arm -m 512 -M ast2600-evb -nographic -drive file=./tmp/deploy/images/ast2600-default/obmc-phosphor-image-ast2600-default-20250214111346.static.mtd,format=raw,if=mtd -net nic -net user
+
+記住obmc-phosphor-image-ast2600-default-20250214111346.static.mtd 名稱絕對不一樣
+
+登入帳密 root  0penBmc
+
+退出 qemu 
+ps aux | grep qemu
+kill -9 ....
+
+ifconfig  裡面總共有4個網口
+
+
+ipmitool
+ipmitool lan print
